@@ -3,17 +3,18 @@ package main
 import (
 	_ "embed"
 
+	"github.com/alecthomas/kong"
+	kongyaml "github.com/alecthomas/kong-yaml"
+
 	"github.com/hoomy-official/cli-kizbox/commands"
 	"github.com/hoomy-official/cli-kizbox/commands/devices"
 	"github.com/hoomy-official/cli-kizbox/globals"
 	"github.com/vanyda-official/go-shared/pkg/cmd"
-
-	"github.com/alecthomas/kong"
 )
 
 //nolint:gochecknoglobals // these global variables exist to be overridden during build
 var (
-	name    = "hoomy"
+	name    = "kizbox"
 	license string
 
 	version     = "dev"
@@ -46,6 +47,7 @@ func main() {
 		kong.Name(name),
 		kong.Description("Simple cli for managing my home automation"),
 		kong.UsageOnError(),
+		kong.Configuration(kongyaml.Loader, "/etc/kizbox/config.yaml", "~/.hoomy/kizbox.yaml"),
 	)
 
 	ctx.FatalIfErrorf(ctx.Run(cli.Globals, cli.Commons))
