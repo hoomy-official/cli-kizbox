@@ -3,10 +3,11 @@ package commands
 import (
 	"context"
 	"fmt"
+	"slices"
+
 	v1 "github.com/hoomy-official/go-kizbox/pkg/api/v1"
 	"github.com/hoomy-official/go-kizbox/pkg/client"
 	"github.com/vanyda-official/go-shared/pkg/cmd"
-	"slices"
 
 	"github.com/hoomy-official/cli-kizbox/filter"
 	"github.com/hoomy-official/cli-kizbox/globals"
@@ -47,7 +48,12 @@ func (s VenitianListCmd) Run(global *globals.Globals, common *cmd.Commons, paren
 	}
 
 	for _, device := range devices {
-		logger.Info(fmt.Sprintf("%s (%s)", device.Label, device.DeviceURL), zap.String("label", device.Label), zap.String("url", device.DeviceURL), zap.Bool("available", device.Available))
+		logger.Info(
+			fmt.Sprintf("%s (%s)", device.Label, device.DeviceURL),
+			zap.String("label", device.Label),
+			zap.String("url", device.DeviceURL),
+			zap.Bool("available", device.Available),
+		)
 	}
 
 	return nil
@@ -210,7 +216,14 @@ func (s VenitianCloseCmd) Run(global *globals.Globals, common *cmd.Commons, pare
 	return DispatchDeviceAction(ctx, api, logger, []string{ControllableName}, parent.Filter, v1.Command{Name: "close"})
 }
 
-func DispatchDeviceAction(ctx context.Context, cl *client.APIClient, logger *zap.Logger, controllers []string, filter filter.Filter, commands ...v1.Command) error {
+func DispatchDeviceAction(
+	ctx context.Context,
+	cl *client.APIClient,
+	logger *zap.Logger,
+	controllers []string,
+	filter filter.Filter,
+	commands ...v1.Command,
+) error {
 	devices, err := DeviceList(ctx, cl, controllers, filter)
 	if err != nil {
 		logger.Error("cannot list device")
@@ -231,7 +244,12 @@ func DispatchDeviceAction(ctx context.Context, cl *client.APIClient, logger *zap
 	return cl.V1.Execution.Apply(ctx, v1.Execute{Label: "cli command test", Actions: actions}, nil)
 }
 
-func DeviceList(ctx context.Context, cl *client.APIClient, controllers []string, filter filter.Filter) ([]v1.Device, error) {
+func DeviceList(
+	ctx context.Context,
+	cl *client.APIClient,
+	controllers []string,
+	filter filter.Filter,
+) ([]v1.Device, error) {
 	var allDevices []v1.Device
 	err := cl.V1.Devices.List(ctx, &allDevices)
 	if err != nil {

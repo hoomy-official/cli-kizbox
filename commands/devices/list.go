@@ -3,19 +3,20 @@ package devices
 import (
 	"context"
 	"fmt"
+	"slices"
+
 	v1 "github.com/hoomy-official/go-kizbox/pkg/api/v1"
 	"github.com/vanyda-official/go-shared/pkg/cmd"
-	"slices"
 
 	"github.com/hoomy-official/cli-kizbox/filter"
 	"github.com/hoomy-official/cli-kizbox/globals"
 )
 
-type DevicesListCmd struct {
+type ListCmd struct {
 	filter.Filter
 }
 
-func (d *DevicesListCmd) Run(global *globals.Globals, common *cmd.Commons) error {
+func (d *ListCmd) Run(global *globals.Globals, common *cmd.Commons) error {
 	logger, err := common.Logger()
 	if err != nil {
 		return err

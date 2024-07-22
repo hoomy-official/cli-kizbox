@@ -2,14 +2,13 @@ package commands
 
 import (
 	"context"
-	"github.com/hoomy-official/go-kizbox/pkg/discover"
-	"github.com/vanyda-official/go-shared/pkg/cmd"
 	"log"
 	"time"
 
-	"github.com/hoomy-official/cli-kizbox/filter"
+	"github.com/hoomy-official/go-kizbox/pkg/discover"
+	"github.com/vanyda-official/go-shared/pkg/cmd"
 
-	"go.uber.org/zap"
+	"github.com/hoomy-official/cli-kizbox/filter"
 )
 
 type DiscoverCmd struct {
@@ -18,13 +17,7 @@ type DiscoverCmd struct {
 	Timeout time.Duration `default:"5s" help:"timeout for discovering (ns, ms, s & m)"`
 }
 
-func (d *DiscoverCmd) Run(common *cmd.Commons) error {
-	logger, err := common.Logger()
-	if err != nil {
-		return err
-	}
-
-	logger = logger.With(zap.Duration("timeout", d.Timeout))
+func (d *DiscoverCmd) Run(_ *cmd.Commons) error {
 	ctx := context.Background()
 
 	ch := make(chan *discover.Gateway, 1)

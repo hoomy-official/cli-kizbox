@@ -11,6 +11,7 @@ import (
 	"github.com/alecthomas/kong"
 )
 
+//nolint:gochecknoglobals // these global variables exist to be overridden during build
 var (
 	name    = "hoomy"
 	license string

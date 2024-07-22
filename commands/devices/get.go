@@ -3,16 +3,17 @@ package devices
 import (
 	"context"
 	"fmt"
+
 	"github.com/hoomy-official/cli-kizbox/globals"
 	v1 "github.com/hoomy-official/go-kizbox/pkg/api/v1"
 	"github.com/vanyda-official/go-shared/pkg/cmd"
 )
 
-type DevicesGetCmd struct {
+type GetCmd struct {
 	URL string `arg:"URL"`
 }
 
-func (d *DevicesGetCmd) Run(global *globals.Globals, common *cmd.Commons) error {
+func (d *GetCmd) Run(global *globals.Globals, common *cmd.Commons) error {
 	logger, err := common.Logger()
 	if err != nil {
 		return err
@@ -29,7 +30,8 @@ func (d *DevicesGetCmd) Run(global *globals.Globals, common *cmd.Commons) error 
 		return err
 	}
 
-	fmt.Printf("%s", device)
+	//nolint:forbidigo // let's not overengineer stdout
+	fmt.Printf("%v", device)
 
 	return nil
 }

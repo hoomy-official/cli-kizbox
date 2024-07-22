@@ -2,12 +2,13 @@ package commands
 
 import (
 	"context"
-	v1 "github.com/hoomy-official/go-kizbox/pkg/api/v1"
-	"github.com/vanyda-official/go-shared/pkg/cmd"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	v1 "github.com/hoomy-official/go-kizbox/pkg/api/v1"
+	"github.com/vanyda-official/go-shared/pkg/cmd"
 
 	"github.com/hoomy-official/cli-kizbox/globals"
 
@@ -43,9 +44,8 @@ func (l ListenCmd) Run(global *globals.Globals, common *cmd.Commons) error {
 		logger.Debug("polling new events")
 
 		var events []map[string]interface{}
-		err := cl.V1.Event.Fetch(ctx, eventRegister, &events)
-		if err != nil {
-			return err
+		if er := cl.V1.Event.Fetch(ctx, eventRegister, &events); er != nil {
+			return er
 		}
 
 		for _, event := range events {

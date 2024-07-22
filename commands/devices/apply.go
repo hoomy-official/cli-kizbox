@@ -2,6 +2,7 @@ package devices
 
 import (
 	"context"
+
 	v1 "github.com/hoomy-official/go-kizbox/pkg/api/v1"
 	"github.com/vanyda-official/go-shared/pkg/cmd"
 
@@ -12,7 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// ApplyCmd apply a configuration to a resources by file name or stdin
+// ApplyCmd apply a configuration to a resources by file name or stdin.
 type ApplyCmd struct {
 	filter.Filter
 	Controllables []string
