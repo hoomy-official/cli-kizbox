@@ -1,0 +1,9 @@
+NAME=cli-kizbox
+DISPLAY_NAME=Kizbox unofficial CLI
+DESCRIPTION=Kizbox unofficial CLI for home automation afficionados
+SOURCE=https://github.com/hoomy-official/cli-kizbox
+
+GITHUB_OWNER=hoomy-official
+GITHUB_REPOSITORY=cli-kizbox
+
+DOCKER_REGISTRY=ghcr.io/hoomy-official/cli-kizbox
