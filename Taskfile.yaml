@@ -5,7 +5,9 @@ includes:
   git: https://raw.githubusercontent.com/vanyda-official/taskfile-git/main/tasks.yaml
   markdownlint: https://raw.githubusercontent.com/vanyda-official/taskfile-markdownlint/main/tasks.yaml
   golangci: https://raw.githubusercontent.com/vanyda-official/taskfile-golangci/main/tasks.yaml
+  goreleaser: https://raw.githubusercontent.com/vanyda-official/taskfile-goreleaser/main/tasks.yaml
 
 dotenv:
   - .env
+  - PROJECT
   - .env.default
