@@ -19,6 +19,14 @@ const (
 	ControllableName = "io:ExteriorVenetianBlindIOComponent"
 )
 
+/**
+commands:
+	- name: open
+      help: "Open stores. By default, it will open all stores"
+      commands:
+        - name: open
+*/
+
 type VenitianCmd struct {
 	filter.Filter
 	List  VenitianListCmd  `cmd:"list" help:"List stores. By default, it will list all stores"`
@@ -70,7 +78,7 @@ func (s VenitianOpenCmd) Run(global *globals.Globals, common *cmd.Commons, paren
 	ctx := context.Background()
 	api := global.Client()
 
-	err = DispatchDeviceAction(ctx, api, logger, []string{ControllableName}, parent.Filter, v1.Command{Name: "open"})
+	err = dispatchDeviceAction(ctx, api, logger, []string{ControllableName}, parent.Filter, v1.Command{Name: "open"})
 	if err != nil {
 		return err
 	}
@@ -151,7 +159,7 @@ func (s VenitianSetCmd) Run(global *globals.Globals, common *cmd.Commons, parent
 		Parameters: []interface{}{0},
 	})
 
-	err = DispatchDeviceAction(ctx, api, logger, []string{ControllableName}, parent.Filter, commands...)
+	err = dispatchDeviceAction(ctx, api, logger, []string{ControllableName}, parent.Filter, commands...)
 	if err != nil {
 		logger.Error("cannot dispatch", zap.Error(err))
 		return err
@@ -171,7 +179,7 @@ func (s VenitianMyCmd) Run(global *globals.Globals, common *cmd.Commons, parent 
 	ctx := context.Background()
 	api := global.Client()
 
-	return DispatchDeviceAction(ctx, api, logger, []string{ControllableName}, parent.Filter, v1.Command{Name: "my"})
+	return dispatchDeviceAction(ctx, api, logger, []string{ControllableName}, parent.Filter, v1.Command{Name: "my"})
 }
 
 type VenitianWinkCmd struct{}
@@ -185,7 +193,7 @@ func (s VenitianWinkCmd) Run(global *globals.Globals, common *cmd.Commons, paren
 	ctx := context.Background()
 	api := global.Client()
 
-	return DispatchDeviceAction(ctx, api, logger, []string{ControllableName}, parent.Filter, v1.Command{Name: "wink"})
+	return dispatchDeviceAction(ctx, api, logger, []string{ControllableName}, parent.Filter, v1.Command{Name: "wink"})
 }
 
 type VenitianStopCmd struct{}
@@ -199,7 +207,7 @@ func (s VenitianStopCmd) Run(global *globals.Globals, common *cmd.Commons, paren
 	ctx := context.Background()
 	api := global.Client()
 
-	return DispatchDeviceAction(ctx, api, logger, []string{ControllableName}, parent.Filter, v1.Command{Name: "stop"})
+	return dispatchDeviceAction(ctx, api, logger, []string{ControllableName}, parent.Filter, v1.Command{Name: "stop"})
 }
 
 type VenitianCloseCmd struct{}
@@ -213,10 +221,10 @@ func (s VenitianCloseCmd) Run(global *globals.Globals, common *cmd.Commons, pare
 	ctx := context.Background()
 	api := global.Client()
 
-	return DispatchDeviceAction(ctx, api, logger, []string{ControllableName}, parent.Filter, v1.Command{Name: "close"})
+	return dispatchDeviceAction(ctx, api, logger, []string{ControllableName}, parent.Filter, v1.Command{Name: "close"})
 }
 
-func DispatchDeviceAction(
+func dispatchDeviceAction(
 	ctx context.Context,
 	cl *client.APIClient,
 	logger *zap.Logger,
@@ -226,8 +234,7 @@ func DispatchDeviceAction(
 ) error {
 	devices, err := DeviceList(ctx, cl, controllers, filter)
 	if err != nil {
-		logger.Error("cannot list device")
-		return err
+		return fmt.Errorf("cannot list devices: %w", err)
 	}
 
 	var actions []v1.Action

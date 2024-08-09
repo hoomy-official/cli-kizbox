@@ -4,8 +4,6 @@ import (
 	_ "embed"
 
 	"github.com/alecthomas/kong"
-	kongyaml "github.com/alecthomas/kong-yaml"
-
 	"github.com/hoomy-official/cli-kizbox/cmd/cli-kizbox/commands"
 	"github.com/hoomy-official/cli-kizbox/cmd/cli-kizbox/commands/devices"
 	"github.com/hoomy-official/cli-kizbox/cmd/cli-kizbox/globals"
@@ -15,6 +13,7 @@ import (
 //nolint:gochecknoglobals // these global variables exist to be overridden during build
 var (
 	name    = "kizbox"
+	group   = "hoomy"
 	license string
 
 	version     = "dev"
@@ -25,10 +24,11 @@ var (
 
 type CLI struct {
 	*cmd.Commons
+	*cmd.Config
 	*globals.Globals
 
 	Venitian commands.VenitianCmd `cmd:"venitians"`
-	Devices  devices.Cmd          `cmd:"devices" help:"list devices availables in the current system"`
+	Devices  devices.Cmd          `cmd:"devices" help:"list devices available in the current system"`
 	Listen   commands.ListenCmd   `cmd:"listen" help:"listen events in the current system"`
 	Discover commands.DiscoverCmd `cmd:"discover" help:"list for systems available"`
 }
@@ -39,6 +39,7 @@ func main() {
 			Version: cmd.NewVersion(name, version, commit, buildSource, date),
 			Licence: cmd.NewLicence(license),
 		},
+		Config:  cmd.NewConfig(name, cmd.WithGroup(group)),
 		Globals: &globals.Globals{},
 	}
 
@@ -47,7 +48,6 @@ func main() {
 		kong.Name(name),
 		kong.Description("Simple cli for managing my home automation"),
 		kong.UsageOnError(),
-		kong.Configuration(kongyaml.Loader, "/etc/kizbox/config.yaml", "~/.hoomy/kizbox.yaml"),
 	)
 
 	ctx.FatalIfErrorf(ctx.Run(cli.Globals, cli.Commons))
