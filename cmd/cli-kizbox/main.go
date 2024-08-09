@@ -13,7 +13,6 @@ import (
 //nolint:gochecknoglobals // these global variables exist to be overridden during build
 var (
 	name    = "kizbox"
-	group   = "hoomy"
 	license string
 
 	version     = "dev"
@@ -28,7 +27,7 @@ type CLI struct {
 	*globals.Globals
 
 	Venitian commands.VenitianCmd `cmd:"venitians"`
-	Devices  devices.Cmd          `cmd:"devices" help:"list devices available in the current system"`
+	Devices  devices.DeviceCmd    `cmd:"devices" help:"devices available in the current system"`
 	Listen   commands.ListenCmd   `cmd:"listen" help:"listen events in the current system"`
 	Discover commands.DiscoverCmd `cmd:"discover" help:"list for systems available"`
 }
@@ -39,7 +38,7 @@ func main() {
 			Version: cmd.NewVersion(name, version, commit, buildSource, date),
 			Licence: cmd.NewLicence(license),
 		},
-		Config:  cmd.NewConfig(name, cmd.WithGroup(group)),
+		Config:  cmd.NewConfig(name),
 		Globals: &globals.Globals{},
 	}
 

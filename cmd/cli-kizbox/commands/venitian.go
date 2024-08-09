@@ -19,14 +19,6 @@ const (
 	ControllableName = "io:ExteriorVenetianBlindIOComponent"
 )
 
-/**
-commands:
-	- name: open
-      help: "Open stores. By default, it will open all stores"
-      commands:
-        - name: open
-*/
-
 type VenitianCmd struct {
 	filter.Filter
 	List  VenitianListCmd  `cmd:"list" help:"List stores. By default, it will list all stores"`
